@@ -1,8 +1,7 @@
-import boto3
-import json
+import requests
 
-
-lambda_client =  boto3.client('lambda', region_name = 'us-east-1' )
+# url = 'http://localhost:8080/2015-03-31/functions/function/invocations'
+url = 'https://aq8dv7o6dl.execute-api.us-east-1.amazonaws.com/predict/predict'
 
 machine_sensor = {
   "s_1": 0.0,
@@ -28,12 +27,5 @@ machine_sensor = {
   "s_21": 0.301234
 }
 
-
-response = lambda_client.invoke(
-    FunctionName='RUL-Prediction',
-    InvocationType = 'RequestResponse',
-    Payload = json.dumps(machine_sensor)
-)
-
-results = json.loads(response['Payload'].read())
-print(json.dumps(results, indent=2))
+result = requests.post(url, json =machine_sensor).json()
+print(result)
